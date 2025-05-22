@@ -1,0 +1,16 @@
+ {{!-- {{> header}} --}}
+ {{!-- <div class="header">
+    <h1>Welcome to Handlebars</h1>
+    <p>Handlebars is a simple templating language</p>
+</div> --}}
+{{> header}}
+<div class="userBody">
+    <h1>Lista de perfumes:</h1>
+     {{#each parfums}}
+     <div>
+        <h2>{{this.title}}</h2>
+        <p>{{this.category}}</p>
+        <p>${{this.price}}</p>    
+     </div>
+     {{/each}}
+</div>

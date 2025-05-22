@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "Dior Sauvage",
+    "description": "Fragancia Masculina 100ml",
+    "code": "A0",
+    "price": 100000,
+    "status": true,
+    "stock": 10,
+    "category": "Eau de Toilette",
+    "thumbnails": []
+  },
+  {
+    "id": 2,
+    "title": "JP Gaultier Le Male Elixir",
+    "description": "Fragancia Masculina 100ml",
+    "code": "A1",
+    "price": 80000,
+    "status": true,
+    "stock": 10,
+    "category": "Eau de Parfum",
+    "thumbnails": []
+  },
+  {
+    "id": 3,
+    "title": "Prada Paradoxe",
+    "description": "Fragancia Femenina 100ml",
+    "code": "A2",
+    "price": 110000,
+    "status": true,
+    "stock": 10,
+    "category": "Eau de Parfum",
+    "thumbnails": []
+  },
+  {
+    "id": 4,
+    "title": "Rabbane Invictus",
+    "description": "Fragancia Masculina 100ml",
+    "code": "A3",
+    "price": 90000,
+    "status": true,
+    "stock": 10,
+    "category": "Eau de Toilette",
+    "thumbnails": []
+  },
+  {
+    "id": 5,
+    "title": "Rabbane Lady Millon",
+    "description": "Fragancia Femenina 100ml",
+    "code": "A4",
+    "price": 190000,
+    "status": true,
+    "stock": 10,
+    "category": "Eau de Parfum",
+    "thumbnails": []
+  },
+  {
+    "id": 6,
+    "title": "Versace Eros",
+    "description": "Fragancia Masculina 100ml",
+    "code": "A5",
+    "price": 210000,
+    "status": true,
+    "stock": 4,
+    "category": "Eau de Parfum",
+    "thumbnails": []
+  }
+]
