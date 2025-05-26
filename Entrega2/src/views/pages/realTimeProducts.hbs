@@ -1,0 +1,49 @@
+
+<div class="userBody">
+   <div class="startTitle">
+      <h1>Lista de Perfumes</h1>
+   </div>
+    
+    <div class="container" id="productContainer">
+      {{#each parfums}}
+     <div class="box" id="product-{{this.id}}">
+        <h2>{{this.title}}</h2>
+        <p>{{this.category}}</p>
+        <p>{{this.description}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>${{this.price}}</p>    
+
+     </div>
+     {{/each}}
+    </div>     
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  socket.on('nuevoProductoCargado', (product) => {
+    const container = document.getElementById('productContainer');
+    if (!container) return;
+
+    // Crear el div con la estructura de producto
+    const div = document.createElement('div');
+    div.className = 'box';
+    div.id = `product-${product.id}`;
+    div.innerHTML = `
+      <h2>${product.title}</h2>
+      <p>${product.category}</p>
+      <p>${product.description}</p>
+      <p>Stock: ${product.stock}</p>
+      <p>$${product.price}</p>
+    `;
+    container.appendChild(div);
+  });
+
+  socket.on('productoEliminado', (productId) => {
+    const productDiv = document.getElementById(`product-${productId}`);
+    if (productDiv) productDiv.remove();
+  });
+
+
+</script>

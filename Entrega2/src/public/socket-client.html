@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cliente Socket.io</title>
+  <script src="/socket.io/socket.io.js"></script> <!-- Este script lo sirve socket.io automáticamente -->
+</head>
+<body>
+  <h1>Cliente con Socket.io</h1>
+  <button onclick="enviar()">Enviar mensaje</button>
+
+  <script>
+    const socket = io(); // se conecta al mismo host
+
+    socket.on('connect', () => {
+      console.log('🟢 Conectado al servidor Socket.io');
+    });
+
+    socket.on('mensajeServidor', (data) => {
+      console.log('📨 Mensaje del servidor:', data);
+    });
+
+    function enviar() {
+      socket.emit('mensajeCliente', 'Hola desde el cliente');
+    }
+  </script>
+</body>
+</html>

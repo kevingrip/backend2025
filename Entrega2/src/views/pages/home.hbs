@@ -1,0 +1,20 @@
+
+<div class="userBody">
+   <div class="startTitle">
+      <h1>Lista de perfumes</h1>
+   </div>
+    
+    <div class="container">
+      {{#each parfums}}
+      <div class="box">
+         
+         <h2>{{this.title}}</h2>
+         <p>{{this.category}}</p>
+         <p>{{this.description}}</p>
+         <p>Stock: {{this.stock}}</p>
+         <p>${{this.price}}</p>    
+
+      </div>
+     {{/each}}
+    </div>     
+</div>
