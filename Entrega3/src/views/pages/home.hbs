@@ -1,0 +1,115 @@
+<div class="userBody">
+  <div class="startTitle">
+    <h1>Lista de Perfumes</h1>
+  </div>
+
+  <div>
+    <button onclick="nuevoCarrito()">Vaciar Carrito</button>
+  </div>
+
+  <div class="container">
+    {{#each parfums}}
+    <div class="box" id="product-{{this._id}}">
+      <h2>{{this.title}}</h2>
+      <p>{{this.category}}</p>
+      <p>{{this.description}}</p>
+      <p>Stock: {{this.stock}}</p>
+      <p>${{this.price}}</p>
+      <p>{{this._id}}</p>
+      <button id="addProductCart" type="button" class="btn btn-success" style="width: 10rem; height: 2rem;"
+        onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pagination-container">
+    {{#if pagination.hasPrevPage}}
+    <a href="/home/?page={{pagination.prevPage}}&limit={{pagination.limit}}&sort={{pagination.sort}}">Anterior</a>
+    {{/if}}
+
+    {{#if pagination.hasAnyPage}}
+    <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
+    {{/if}}
+
+    {{#if pagination.hasNextPage}}
+    <a href="/home/?page={{pagination.nextPage}}&limit={{pagination.limit}}&sort={{pagination.sort}}">Siguiente</a>
+    {{/if}}
+  </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  socket.on('nuevoProductoCargado', (product) => {
+    const container = document.getElementById('productContainer');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'box';
+    div.id = `product-${product._id}`;
+    div.innerHTML = `
+      <h2>${product.title}</h2>
+      <p>${product.category}</p>
+      <p>${product.description}</p>
+      <p>Stock: ${product.stock}</p>
+      <p>$${product.price}</p>
+      <p>${product._id}</p>
+    `;
+    container.appendChild(div);
+  });
+
+  socket.on('productoEliminado', (productId) => {
+    const productDiv = document.getElementById(`product-${productId}`);
+    if (productDiv) productDiv.remove();
+  });
+
+  socket.on('productoActualizado', (product) => {
+    const productDiv = document.getElementById(`product-${product._id}`);
+    if (productDiv) {
+      productDiv.innerHTML = `
+          <h2>${product.title}</h2>
+          <p>${product.category}</p>
+          <p>${product.description}</p>
+          <p>Stock: ${product.stock}</p>
+          <p>$${product.price}</p>
+          <p>${product._id}</p>
+          
+        `;
+    }
+  });
+
+  socket.on('connect', () => {
+    const cartId = localStorage.getItem('cartId');
+    socket.emit('solicitarCarrito', cartId);
+  });
+
+  socket.on("carritoAsignado", (data) => {
+    localStorage.setItem("cartId", data.cartId);
+  });
+
+
+
+  const addToCart = async (product) => {
+    const cartId = localStorage.getItem("cartId");
+    const res = await fetch(`/api/carts/${cartId}/product/${product}`, {
+      method: "POST"
+    });
+
+    if (res.ok) {
+      console.log("Producto agregado al carrito");
+    } else {
+      console.error("Error al enviar el formulario");
+    }
+  }
+
+  const nuevoCarrito = () =>{
+    localStorage.removeItem('cartId');
+    console.log("Carrito nuevo creado")
+    socket.emit('solicitarCarrito', null);
+
+  }
+
+</script>

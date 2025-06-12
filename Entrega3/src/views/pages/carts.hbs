@@ -1,0 +1,34 @@
+<div class="userBody">
+  <div class="startTitle">
+    <h1>Carrito de compras</h1>
+  </div>
+
+  <div class="container">
+    {{#each productos}}
+      <div class="box">
+          <h2>{{this.idProduct.title}}</h2>
+          <p>{{this.idProduct.category}}</p>
+          <p>{{this.idProduct.description}}</p>
+          <p>Precio: ${{this.idProduct.price}}</p>
+          <p>Cantidad seleccionada: {{this.quantity}}</p>
+        </div>
+    {{/each}}
+  </div>
+
+  <div class="pagination-container">
+    {{#if pagination.hasPrevPage}}
+    <a href="/api/home/?page={{pagination.prevPage}}&limit={{pagination.limit}}&sort={{pagination.sort}}">Anterior</a>
+    {{/if}}
+
+    {{#if pagination.hasAnyPage}}
+    <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
+    {{/if}}
+
+    {{#if pagination.hasNextPage}}
+    <a href="/api/home/?page={{pagination.nextPage}}&limit={{pagination.limit}}&sort={{pagination.sort}}">Siguiente</a>
+    {{/if}}
+  </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
