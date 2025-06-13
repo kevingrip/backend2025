@@ -3,8 +3,8 @@
     <h1>Lista de Perfumes</h1>
   </div>
 
-  <div>
-    <button onclick="nuevoCarrito()">Vaciar Carrito</button>
+  <div style="display: flex;justify-content: flex-end; margin: 5vh" >
+    <button onclick="vaciarCarrito()">Vaciar Carrito</button>
   </div>
 
   <div class="container">
@@ -105,11 +105,12 @@
     }
   }
 
-  const nuevoCarrito = () =>{
-    localStorage.removeItem('cartId');
-    console.log("Carrito nuevo creado")
-    socket.emit('solicitarCarrito', null);
-
-  }
+  const vaciarCarrito = async () => {
+    const cartId = localStorage.getItem("cartId");
+    const res = await fetch(`/api/carts/${cartId}`, {
+      method: "DELETE"
+    });
+    console.log("Carrito vaciado correctamente")
+}
 
 </script>

@@ -58,5 +58,6 @@ io.on('connection', (socket) => {
 export { io };
 
 server.listen(PORT, () => {
-    console.log(`Servidor + socket corriendo en http://localhost:${PORT}/api/realTimeProducts`)
+    console.log(`Servidor + socket + hbs corriendo en http://localhost:${PORT}/home`)
+    console.log(`Servidor + socket + api corriendo en http://localhost:${PORT}/api/products`)
 })
