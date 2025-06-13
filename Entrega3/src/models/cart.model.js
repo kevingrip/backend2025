@@ -7,7 +7,7 @@ const collection = 'carts';
 const schema = new mongoose.Schema({
 
     cartId: { type: mongoose.Types.ObjectId, required: true },
-    list: [{idProduct:{type: String, required: true, ref: 'product'},quantity:{ type: Number, required: true }}]
+    list: [{idProduct:{type: mongoose.Schema.Types.ObjectId, required: true, ref: 'product'},quantity:{ type: Number, required: true }}]
 
     
 },{ versionKey: false });

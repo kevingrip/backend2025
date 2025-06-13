@@ -64,6 +64,19 @@ router.put('/:cid/product/:pid', async (req, res) => {
     }
 })
 
+router.put('/:cid', async (req, res) => {
+    try {
+        const bodyProducts = req.body;
+        const cartId = req.params.cid;
+
+        const updateArrayProducts = await dbCartManager.updateArray(bodyProducts,cartId)
+
+        res.status(200).send({ status: 3, payload: updateArrayProducts });
+    } catch (error) {
+        res.status(500).send({ status: "error", message: "error del servidor" })
+    }
+})
+
 router.delete('/:cid', async (req, res) => {
     try {
         const cartId = req.params.cid;

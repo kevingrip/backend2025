@@ -8,7 +8,7 @@ class CartCollectionManager {
 
     getAllCart = async () => {
         try {
-            return await cartModel.find().populate({path:'list.idProduct',model: productModel})
+            return await cartModel.find().populate({ path: 'list.idProduct', model: productModel })
         } catch (err) {
             return err.message;
         };
@@ -26,19 +26,19 @@ class CartCollectionManager {
 
     addProductCart = async (id, productId) => {
         try {
-            const cartProduct = await cartModel.findOne({cartId: id});
+            const cartProduct = await cartModel.findOne({ cartId: id });
             if (!cartProduct) {
                 return 'Carrito no encontrado'
             }
-    
+
             const prod = await productModel.findById(productId);
             if (!prod) {
                 return 'Producto no encontrado'
             }
-    
+
             const prodList = cartProduct.list;
             const prodFilter = prodList.filter(item => item.idProduct === productId);
-    
+
             if (prodFilter.length > 0) {
                 prodList.forEach(item => {
                     if (item.idProduct === productId) {
@@ -48,21 +48,33 @@ class CartCollectionManager {
             } else {
                 prodList.push({ idProduct: productId, quantity: 1 });
             }
-    
+
             await cartModel.findOneAndUpdate({ cartId: id }, cartProduct);
             return cartProduct;
         } catch (err) {
             return err.message;
         }
     };
-    
-    
+
+    updateArray = async (array, cartId) => {
+        try {
+            const cart = await cartModel.findOneAndUpdate(
+                { cartId: cartId },
+                { list: array },
+                { new: true }
+            )
+            return cart;
+        } catch (err) {
+            return err.message;
+        }
+    }
+
 
     getCartById = async (id) => {
         try {
-            const cart = await cartModel.findOne({cartId: id}).populate({
-            path: 'list.idProduct',
-            model: productModel
+            const cart = await cartModel.findOne({ cartId: id }).populate({
+                path: 'list.idProduct',
+                model: productModel
             });
 
             return cart;
@@ -91,20 +103,20 @@ class CartCollectionManager {
         try {
             await cartModel.findOneAndUpdate(
                 { cartId: cart },
-                { list: [] } 
-              );
+                { list: [] }
+            );
             return "Carrito vaciado correctamente"
         } catch (err) {
             return err.message;
         };
     };
 
-    deleteProdByCart = async (cart,product) =>{
-        try{
+    deleteProdByCart = async (cart, product) => {
+        try {
             await cartModel.updateOne(
                 { cartId: cart },
                 { $pull: { list: { idProduct: product } } }
-              );
+            );
             return "Producto borrado del carrito correctamente"
         } catch (err) {
             return err.message;
@@ -113,6 +125,6 @@ class CartCollectionManager {
 
 
 
-}    
+}
 
 export default CartCollectionManager;

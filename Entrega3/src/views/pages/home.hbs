@@ -3,7 +3,9 @@
     <h1>Lista de Perfumes</h1>
   </div>
 
-  <div style="display: flex;justify-content: flex-end; margin: 5vh">
+  <div style="display: flex; flex-direction: column; margin:10px; align-items:flex-end; ">
+    <div ><a href="" id="cartCounter">0</a></div> 
+    {{!-- corregir para poner el cartid que corresponda --}}
     <button onclick="vaciarCarrito()">Vaciar Carrito</button>
   </div>
 
@@ -81,22 +83,47 @@
     }
   });
 
-  socket.on('connect', () => {
+  socket.on('connect', async () => {
     const cartId = localStorage.getItem('cartId');
     socket.emit('solicitarCarrito', cartId);
+    let total = await cartCounter(cartId)
+    document.getElementById("cartCounter").textContent = total
+    document.getElementById("cartCounter").href = `carts/${cartId}`
   });
 
   socket.on("carritoAsignado", (data) => {
     localStorage.setItem("cartId", data.cartId);
   });
 
+  const cartCounter = async (cartId) =>{
+    const cartProducts = await fetch(`/api/carts/${cartId}/`, {
+      method: "GET"
+    });
+
+    const cartProductsParsed = await cartProducts.json()
+
+    const lista = cartProductsParsed.payload.list
+    let total = 0
+    lista.forEach(item => total += 1) 
+
+    return total
+  }
 
 
   const addToCart = async (product) => {
     const cartId = localStorage.getItem("cartId");
+    
+    //AGREGAMOS EL NUEVO PRODUCTO
     const res = await fetch(`/api/carts/${cartId}/product/${product}`, {
       method: "POST"
     });
+
+    //CONSULTAMOS CUANTOS PRODUCTOS HAY PARA ACTUALIZAR EL CONTADOR
+
+    let total = await cartCounter(cartId)
+
+    document.getElementById("cartCounter").textContent = total
+
 
     if (res.ok) {
       console.log("Producto agregado al carrito");
@@ -108,7 +135,7 @@
         showConfirmButton: false
       });
     } else {
-      console.error("Error al enviar el formulario");
+      console.error("Error al agregar producto");
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -118,7 +145,8 @@
   }
 
   const vaciarCarrito = async () => {
-    const cartId = localStorage.getItem("cartId");
+    const cartId = localStorage.getItem("cartId");    
+    
     const res = await fetch(`/api/carts/${cartId}`, {
       method: "DELETE"
     });
@@ -131,8 +159,12 @@
         timer: 1500,
         showConfirmButton: false
       });
+
+      let total = await cartCounter(cartId)
+
+      document.getElementById("cartCounter").textContent = total
     }else {
-      console.error("Error al enviar el formulario");
+      console.error("Error al vaciar carrito");
       Swal.fire({
         icon: 'error',
         title: 'Error',
