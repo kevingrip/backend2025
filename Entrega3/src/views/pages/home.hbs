@@ -3,7 +3,7 @@
     <h1>Lista de Perfumes</h1>
   </div>
 
-  <div style="display: flex;justify-content: flex-end; margin: 5vh" >
+  <div style="display: flex;justify-content: flex-end; margin: 5vh">
     <button onclick="vaciarCarrito()">Vaciar Carrito</button>
   </div>
 
@@ -16,8 +16,8 @@
       <p>Stock: {{this.stock}}</p>
       <p>${{this.price}}</p>
       <p>{{this._id}}</p>
-      <button id="addProductCart" type="button" class="btn btn-success" style="width: 10rem; height: 2rem;"
-        onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+      <button type="button" style="width: 10rem; height: 2rem; margin:1rem" onclick="addToCart('{{this._id}}')">Agregar
+        al carrito</button>
 
     </div>
     {{/each}}
@@ -100,8 +100,20 @@
 
     if (res.ok) {
       console.log("Producto agregado al carrito");
+      Swal.fire({
+        icon: 'success',
+        title: '¡Listo!',
+        text: 'Producto agregado al carrito',
+        timer: 1500,
+        showConfirmButton: false
+      });
     } else {
       console.error("Error al enviar el formulario");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo agregar el producto',
+      });
     }
   }
 
@@ -110,8 +122,27 @@
     const res = await fetch(`/api/carts/${cartId}`, {
       method: "DELETE"
     });
-    console.log("Carrito vaciado correctamente")
-}
+    if (res.ok){
+      console.log("Carrito vaciado correctamente")
+      Swal.fire({
+        icon: 'success',
+        title: '¡Listo!',
+        text: 'Carrito vaciado correctamente',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }else {
+      console.error("Error al enviar el formulario");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo vaciar el carrito',
+      });
+    }
+    
+  }
+
 
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
